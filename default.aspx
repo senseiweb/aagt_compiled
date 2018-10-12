@@ -271,7 +271,7 @@ text-decoration:none;
               var oConfigList = clientCtx.get_web().get_lists().getByTitle('SpConfigData');
               var camlQuery = new SP.CamlQuery();
               camlQuery.set_viewXml(
-                      '<View><Query><Where><BeginsWith><FieldRef Name="ConfigKey"/>' +
+                      '<View><Query><Where><BeginsWith><FieldRef Name="Title"/>' +
                       '<Value Type="Text">app-</Value></BeginsWith></Where></Query>' +
                       '<RowLimit>50</RowLimit></View>');
               var configSettings = oConfigList.getItems(camlQuery);
@@ -296,7 +296,8 @@ text-decoration:none;
                 while (configEnum.moveNext()) {
                   var currItem = configEnum.get_current();
                   appConfig.configSettings.push({
-                    configKey: currItem.get_item('ConfigKey'),
+                    id: currItem.get_id(),
+                    configKey: currItem.get_item('Title'),
                     configValue: currItem.get_item('ConfigValue')
                   })
                 }
@@ -314,7 +315,7 @@ text-decoration:none;
                 localStorage.setItem('AppConfig', JSON.stringify(appConfig));
                 SP.UI.ModalDialog.commonModalDialogClose(SP.UI.DialogResult.Cancel);
                 SP.UI.ModalDialog.showWaitScreenWithNoClose("Done!...", "Starting AAGT app");
-                window.location.replace(appConfig.appWebUrl + '/aagt-index.html');
+                window.location.replace('./aagt-index.html');
               }, function (sender, error) {
                 SP.UI.ModalDialog.showModalDialog(dialogOptions);
                 console.log("Critical Error: failed to get data from the server--> " + error.get_message());
